@@ -1,4 +1,4 @@
-package com.zupacademy.izabella.proposta;
+package com.zupacademy.izabella.propostas;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
