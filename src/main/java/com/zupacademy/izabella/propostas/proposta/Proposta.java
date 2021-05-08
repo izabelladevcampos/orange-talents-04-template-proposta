@@ -33,8 +33,12 @@ public class Proposta {
 	@NotNull
 	private BigDecimal salario;
 
+	@Deprecated
+	public Proposta() {
+
+	}
+
 	public Proposta(String documento, String email, String nome, String endereco, BigDecimal salario) {
-		super();
 		this.documento = documento;
 		this.email = email;
 		this.nome = nome;
@@ -44,6 +48,10 @@ public class Proposta {
 
 	public Long getId() {
 		return id;
+	}
+
+	public String getDocumento() {
+		return documento;
 	}
 
 }
