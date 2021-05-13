@@ -3,6 +3,8 @@ package com.zupacademy.izabella.propostas.proposta;
 import java.math.BigDecimal;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,6 +35,9 @@ public class Proposta {
 	@NotNull
 	private BigDecimal salario;
 
+	@Enumerated(EnumType.STRING)
+	private RespostaAnalise resposta = RespostaAnalise.NAO_ANALISADO;
+
 	@Deprecated
 	public Proposta() {
 
@@ -53,5 +58,31 @@ public class Proposta {
 	public String getDocumento() {
 		return documento;
 	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public String getEndereco() {
+		return endereco;
+	}
+
+	public BigDecimal getSalario() {
+		return salario;
+	}
+
+	public RespostaAnalise getStatusAnalise() {
+		return getStatusAnalise();
+	}
+
+	public void setStatusAnalise(RespostaAnalise statusAnalise) {
+		this.resposta = statusAnalise;
+	}
+
+
 
 }
