@@ -107,6 +107,36 @@ services:
     environment:
       COLLECTOR_ZIPKIN_HTTP_PORT: 9411
 
+  mysql:
+    image: mysql:5.7 
+    volumes:
+      - volume-mysql:/var/lib/mysql
+    ports:
+      - "3308:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456 
+      MYSQL_DATABASE: proposta 
+  
+  proposta:
+     build:
+       dockerfile: Dockerfile
+       context: .
+     image: izabellacampos/proposta
+     restart: on-failure
+     container_name: proposta
+     ports:
+      - "8080:8080"
+     depends_on: 
+      - mysql
+      - analise
+      - contas
+     environment:
+        DATABASE_URL: jdbc:mysql://mysql:3306/proposta
+        DATABASE_USER: root
+        DATABASE_PASSWORD: 123456
+        API_ANALISE_URL: http://analise:9999
+        API_CARTAO_URL: http://contas:8888
+
   prometheus:
     image: prom/prometheus
     volumes:
@@ -114,7 +144,7 @@ services:
     network_mode: bridge
     ports:
       - "9090:9090"
-
+    
   grafana:
     image: grafana/grafana
     volumes:
@@ -138,3 +168,4 @@ volumes:
   grafana-volume:
   prometheus-volume:
   postgres-volume:
+  volume-mysql:
