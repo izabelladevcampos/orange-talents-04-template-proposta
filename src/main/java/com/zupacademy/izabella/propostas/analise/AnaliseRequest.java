@@ -1,4 +1,4 @@
-package com.zupacademy.izabella.propostas.apiExterna;
+package com.zupacademy.izabella.propostas.analise;
 
 import com.zupacademy.izabella.propostas.proposta.Proposta;
 

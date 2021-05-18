@@ -13,13 +13,15 @@ import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
+import javax.validation.ReportAsSingleViolation;
 
 @Documented
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = {})
-@ConstraintComposition(CompositionType.OR)
+@ReportAsSingleViolation
 @CPF
+@ConstraintComposition(CompositionType.OR)
 @CNPJ
 public @interface CPFouCNPJ {
     String message() default "O documento informado é inválido";

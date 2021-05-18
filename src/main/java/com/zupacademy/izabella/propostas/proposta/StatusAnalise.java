@@ -1,7 +1,6 @@
 package com.zupacademy.izabella.propostas.proposta;
 
-public enum RespostaAnalise {
-	NAO_ANALISADO,
+public enum StatusAnalise {
 	NAO_ELEGIVEL,
 	ELEGIVEL
 

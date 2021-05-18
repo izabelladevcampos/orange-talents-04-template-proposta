@@ -2,15 +2,22 @@ package com.zupacademy.izabella.propostas.proposta;
 
 import java.math.BigDecimal;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
+import com.zupacademy.izabella.propostas.cartao.Cartao;
 
 @Entity
 public class Proposta {
@@ -29,21 +36,31 @@ public class Proposta {
 	@NotBlank
 	private String nome;
 
-	@NotBlank
-	private String endereco;
+	@NotNull
+	@Embedded
+	private Endereco endereco;
 
 	@NotNull
+	@Positive
 	private BigDecimal salario;
 
 	@Enumerated(EnumType.STRING)
-	private RespostaAnalise resposta = RespostaAnalise.NAO_ANALISADO;
+	private StatusAnalise status;
 
+	@OneToOne(cascade = CascadeType.ALL)
+	private Cartao cartao;
+
+	/*
+	 * @Deprecated apenas para uso do hibernate
+	 * 
+	 */
 	@Deprecated
-	public Proposta() {
+	Proposta() {
 
 	}
 
-	public Proposta(String documento, String email, String nome, String endereco, BigDecimal salario) {
+	public Proposta(@NotBlank String documento, @NotBlank @Email String email, @NotBlank String nome,
+			@Valid Endereco endereco, @NotNull @Positive BigDecimal salario) {
 		this.documento = documento;
 		this.email = email;
 		this.nome = nome;
@@ -67,7 +84,7 @@ public class Proposta {
 		return nome;
 	}
 
-	public String getEndereco() {
+	public Endereco getEndereco() {
 		return endereco;
 	}
 
@@ -75,14 +92,16 @@ public class Proposta {
 		return salario;
 	}
 
-	public RespostaAnalise getStatusAnalise() {
-		return getStatusAnalise();
+	public StatusAnalise getStatusResposta() {
+		return status;
 	}
 
-	public void setStatusAnalise(RespostaAnalise statusAnalise) {
-		this.resposta = statusAnalise;
+	public void setRespostaAnalise(StatusAnalise status) {
+		this.status = status;
 	}
 
-
+	public void setCartao(Cartao cartao) {
+		this.cartao = cartao;
+	}
 
 }

@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.zupacademy.izabella.propostas.apiExterna.AnaliseClientFeing;
-import com.zupacademy.izabella.propostas.apiExterna.AnaliseRequest;
+import com.zupacademy.izabella.propostas.analise.AnaliseClientFeing;
+import com.zupacademy.izabella.propostas.analise.AnaliseRequest;
+import com.zupacademy.izabella.propostas.analise.AnaliseResponse;
+import com.zupacademy.izabella.propostas.compartilhado.erros.Erros;
 
 import feign.FeignException;
 
@@ -32,14 +34,12 @@ public class PropostaController {
 	public ResponseEntity<?> criaProposta(@RequestBody @Valid NovaPropostaRequest request,
 			UriComponentsBuilder builder) {
 
-		boolean documentoCadastrado = propostaRepository.existsByDocumento(request.getDocumento());
-		if (documentoCadastrado) {
+		if (propostaRepository.existsByDocumento(request.getDocumento())) {
 			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-					.body("Já existe uma proposta para o documento informado");
+					.body(new Erros("documento", "Já existe uma proposta para o documento informado!"));
 		}
 
 		Proposta novaProposta = request.toModel();
-		System.out.println(novaProposta);
 		propostaRepository.save(novaProposta);
 		analisaDocumento(novaProposta);
 		propostaRepository.save(novaProposta);
@@ -48,13 +48,17 @@ public class PropostaController {
 	}
 
 	private void analisaDocumento(Proposta proposta) {
-		RespostaAnalise status;
+
 		try {
-			client.analisaProposta(new AnaliseRequest(proposta));
-			status = RespostaAnalise.ELEGIVEL;
+			AnaliseResponse resposta = client.analisaProposta(new AnaliseRequest(proposta));
+			StatusAnalise status = resposta.status();
+			proposta.setRespostaAnalise(status);
+
 		} catch (FeignException.UnprocessableEntity e) {
-			status = RespostaAnalise.NAO_ELEGIVEL;
+			proposta.setRespostaAnalise(StatusAnalise.NAO_ELEGIVEL);
+		} catch (FeignException.ServiceUnavailable ex) {
+			propostaRepository.delete(proposta);
 		}
-		proposta.setStatusAnalise(status);
+
 	}
 }

@@ -2,9 +2,11 @@ package com.zupacademy.izabella.propostas.proposta;
 
 import java.math.BigDecimal;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 import com.zupacademy.izabella.propostas.compartilhado.validacao.CPFouCNPJ;
 
@@ -21,15 +23,15 @@ public class NovaPropostaRequest {
 	@NotBlank
 	private String nome;
 
-	@NotBlank
-	private String endereco;
+	@Valid
+	private EnderecoRequest endereco;
 
 	@NotNull
+	@Positive
 	private BigDecimal salario;
 
 	public NovaPropostaRequest(@NotBlank String documento, @NotBlank @Email String email, @NotBlank String nome,
-			@NotBlank String endereco, @NotNull BigDecimal salario) {
-		super();
+			@Valid EnderecoRequest endereco, @NotNull @Positive BigDecimal salario) {
 		this.documento = documento;
 		this.email = email;
 		this.nome = nome;
@@ -38,7 +40,9 @@ public class NovaPropostaRequest {
 	}
 
 	public Proposta toModel() {
-		return new Proposta(this.documento, this.email, this.nome, this.endereco, this.salario);
+		Endereco novoEndereco = endereco.paraEnderecoModel();
+
+		return new Proposta(this.documento, this.email, this.nome, novoEndereco, this.salario);
 	}
 
 	public String getDocumento() {
