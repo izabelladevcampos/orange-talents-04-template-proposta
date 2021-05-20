@@ -21,7 +21,7 @@ import com.zupacademy.izabella.propostas.compartilhado.erros.Erros;
 import feign.FeignException;
 
 @RestController
-@RequestMapping("/propostas")
+@RequestMapping("api/propostas")
 public class PropostaController {
 
 	@Autowired
