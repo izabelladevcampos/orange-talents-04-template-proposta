@@ -24,6 +24,7 @@ public class EnderecoRequest {
 	@NotBlank
 	private String estado;
 
+
 	public EnderecoRequest(@NotBlank String rua, @NotBlank String cep, @NotBlank String numero,
 			@NotBlank String complemento, @NotBlank String bairro, @NotBlank String cidade, @NotBlank String estado) {
 		this.rua = rua;

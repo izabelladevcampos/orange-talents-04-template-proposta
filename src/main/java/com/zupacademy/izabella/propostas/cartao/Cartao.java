@@ -2,56 +2,77 @@ package com.zupacademy.izabella.propostas.cartao;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
+import com.zupacademy.izabella.propostas.cartao.bloqueio.Bloqueio;
 import com.zupacademy.izabella.propostas.proposta.Proposta;
 
 @Entity
 public class Cartao {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	private String numero;
-	private String titular;
-	private LocalDateTime dataEmissao;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String numero;
+    private String titular;
+    private LocalDateTime dataEmissao;
 
-	@OneToOne(mappedBy = "cartao")
-	private Proposta proposta;
+    @Enumerated(EnumType.STRING)
+    private StatusCartao status = StatusCartao.ATIVO;
 
-	@Deprecated
-	Cartao() {
-	}
+    @OneToOne(mappedBy = "cartao")
+    private Proposta proposta;
 
-	public Cartao(String numero, String titular, LocalDateTime dataEmissao, Proposta proposta) {
-		this.numero = numero;
-		this.titular = titular;
-		this.dataEmissao = dataEmissao;
-		this.proposta = proposta;
-	}
+    @OneToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "bloqueio_id", referencedColumnName = "id")
+    private Bloqueio bloqueio;
 
-	public String getNumero() {
-		return numero;
-	}
+    @Deprecated
+    public Cartao() {
+    }
 
-	public String getTitular() {
-		return titular;
-	}
+    public Cartao(String numero, String titular, LocalDateTime dataEmissao, Proposta proposta) {
+        this.numero = numero;
+        this.titular = titular;
+        this.dataEmissao = dataEmissao;
+        this.proposta = proposta;
+    }
 
-	public LocalDateTime getDataEmissao() {
-		return dataEmissao;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public Proposta getProposta() {
-		return proposta;
-	}
+    public String getNumero() {
+        return numero;
+    }
 
-	public void setNumero(String numero) {
-		this.numero = numero;
-	}
+    public String getTitular() {
+        return titular;
+    }
 
+    public LocalDateTime getDataEmissao() {
+        return dataEmissao;
+    }
+
+    public Proposta getProposta() {
+        return proposta;
+    }
+
+    public StatusCartao getStatus() {
+        return status;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+    public boolean emailPertenceAoUsuario(Object email) {
+        return email.equals(proposta.getEmail());
+    }
+
+    public void adicionaBloqueio(Bloqueio bloqueio) {
+        this.bloqueio = bloqueio;
+        this.status = StatusCartao.BLOQUEADO;
+
+    }
 }

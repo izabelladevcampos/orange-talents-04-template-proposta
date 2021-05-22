@@ -9,19 +9,22 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 
-@EnableWebSecurity
 @Configuration
-public class ConfigSecurity extends WebSecurityConfigurerAdapter {
+@EnableWebSecurity
+public class ConfigSecurity extends WebSecurityConfigurerAdapter{
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-                http.authorizeRequests(authorizeRequests -> authorizeRequests
-                        .mvcMatchers("**/actuator/**").permitAll()
-                        .mvcMatchers(HttpMethod.GET, "/teste/**").hasAuthority("SCOPE_proposta")
-                        .mvcMatchers(HttpMethod.POST, "/api/propostas/**").hasAuthority("SCOPE_proposta")
-                        .mvcMatchers(HttpMethod.PATCH, "/api/cartoes/**").hasAuthority("SCOPE_proposta")
+        http.authorizeRequests(authorizeRequests -> authorizeRequests
+                .antMatchers("**/actuator/**").permitAll()
+                .antMatchers(HttpMethod.POST, "api/propostas/**").hasAuthority("SCOPE_proposta")
+                .antMatchers(HttpMethod.GET, "api/propostas/**").hasAuthority("SCOPE_proposta")
+                .antMatchers(HttpMethod.POST, "api/cartoes/**").hasAuthority("SCOPE_proposta")
+                .anyRequest().authenticated()
 
         ).oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
+
+
     }
 }

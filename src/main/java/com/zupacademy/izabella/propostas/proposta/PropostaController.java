@@ -24,41 +24,41 @@ import feign.FeignException;
 @RequestMapping("api/propostas")
 public class PropostaController {
 
-	@Autowired
-	PropostaRepository propostaRepository;
+    @Autowired
+    PropostaRepository propostaRepository;
 
-	@Autowired
-	private AnaliseClientFeing client;
+    @Autowired
+    private AnaliseClientFeing client;
 
-	@PostMapping
-	public ResponseEntity<?> criaProposta(@RequestBody @Valid NovaPropostaRequest request,
-			UriComponentsBuilder builder) {
+    @PostMapping
+    public ResponseEntity<?> criaProposta(@RequestBody @Valid NovaPropostaRequest request,
+                                          UriComponentsBuilder builder) {
 
-		if (propostaRepository.existsByDocumento(request.getDocumento())) {
-			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-					.body(new Erros("documento", "Já existe uma proposta para o documento informado!"));
-		}
+        if (propostaRepository.existsByDocumento(request.getDocumento())) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                    .body(new Erros("documento", "Já existe uma proposta para o documento informado!"));
+        }
 
-		Proposta novaProposta = request.toModel();
-		propostaRepository.save(novaProposta);
-		analisaDocumento(novaProposta);
-		propostaRepository.save(novaProposta);
-		URI path = builder.path("/propostas/{id}").build(novaProposta.getId());
-		return ResponseEntity.created(path).build();
-	}
+        Proposta novaProposta = request.toModel();
+        propostaRepository.save(novaProposta);
+        analisaDocumento(novaProposta);
+        propostaRepository.save(novaProposta);
+        URI path = builder.path("/propostas/{id}").build(novaProposta.getId());
+        return ResponseEntity.created(path).build();
+    }
 
-	private void analisaDocumento(Proposta proposta) {
+    private void analisaDocumento(Proposta proposta) {
 
-		try {
-			AnaliseResponse resposta = client.analisaProposta(new AnaliseRequest(proposta));
-			StatusAnalise status = resposta.status();
-			proposta.setRespostaAnalise(status);
+        try {
+            AnaliseResponse resposta = client.analisaProposta(new AnaliseRequest(proposta));
+            StatusAnalise status = resposta.status();
+            proposta.setRespostaAnalise(status);
 
-		} catch (FeignException.UnprocessableEntity e) {
-			proposta.setRespostaAnalise(StatusAnalise.NAO_ELEGIVEL);
-		} catch (FeignException.ServiceUnavailable ex) {
-			propostaRepository.delete(proposta);
-		}
+        } catch (FeignException.UnprocessableEntity e) {
+            proposta.setRespostaAnalise(StatusAnalise.NAO_ELEGIVEL);
+        } catch (FeignException.ServiceUnavailable ex) {
+            propostaRepository.delete(proposta);
+        }
 
-	}
+    }
 }

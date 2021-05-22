@@ -36,7 +36,7 @@ public class Proposta {
 	@NotBlank
 	private String nome;
 
-	@NotNull
+	@Valid
 	@Embedded
 	private Endereco endereco;
 
@@ -54,8 +54,9 @@ public class Proposta {
 	 * @Deprecated apenas para uso do hibernate
 	 * 
 	 */
+
 	@Deprecated
-	Proposta() {
+	public Proposta() {
 
 	}
 

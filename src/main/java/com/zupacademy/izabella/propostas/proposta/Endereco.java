@@ -27,11 +27,11 @@ public class Endereco {
 	private String estado;
 
 	/*
-	 * @Deprecated apenas para uso do hibernate
+	 * @Deprecated apenas para uso do framework
 	 * 
 	 */
 	@Deprecated
-	Endereco() {
+	public Endereco() {
 
 	}
 
