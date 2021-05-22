@@ -17,10 +17,11 @@ public class ConfigSecurity extends WebSecurityConfigurerAdapter{
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests(authorizeRequests -> authorizeRequests
-                .antMatchers("**/actuator/**").permitAll()
                 .antMatchers(HttpMethod.POST, "api/propostas/**").hasAuthority("SCOPE_proposta")
-                .antMatchers(HttpMethod.GET, "api/propostas/**").hasAuthority("SCOPE_proposta")
+                .antMatchers(HttpMethod.GET,  "api/propostas/**").hasAuthority("SCOPE_proposta")
+                .antMatchers(HttpMethod.GET, "api/cartoes/**").hasAuthority("SCOPE_proposta")
                 .antMatchers(HttpMethod.POST, "api/cartoes/**").hasAuthority("SCOPE_proposta")
+                .antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
                 .anyRequest().authenticated()
 
         ).oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
