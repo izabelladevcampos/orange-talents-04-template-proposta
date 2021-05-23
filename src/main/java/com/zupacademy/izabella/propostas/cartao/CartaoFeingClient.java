@@ -2,6 +2,7 @@ package com.zupacademy.izabella.propostas.cartao;
 
 import com.zupacademy.izabella.propostas.aviso.viagem.AvisoViagemRequest;
 import com.zupacademy.izabella.propostas.cartao.bloqueio.NovoBloqueioRequest;
+import com.zupacademy.izabella.propostas.carteiradigital.NovaCarteiraRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,5 +17,8 @@ public interface CartaoFeingClient {
 
 	@PostMapping(value = "/api/cartoes/{id}/avisos", consumes = "application/json")
 	void avisaViagem(@PathVariable("id") String id, @RequestBody AvisoViagemRequest request);
+
+	@PostMapping(value = "api/cartoes/{id}/carteiras", consumes = "application/json")
+	void adicionaCarteira(@PathVariable("id") String numeroCartao, @RequestBody NovaCarteiraRequest request);
 
 }
