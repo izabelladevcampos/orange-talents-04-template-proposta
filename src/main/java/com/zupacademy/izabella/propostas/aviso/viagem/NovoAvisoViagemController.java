@@ -1,8 +1,10 @@
 package com.zupacademy.izabella.propostas.aviso.viagem;
 
 import com.zupacademy.izabella.propostas.cartao.Cartao;
+import com.zupacademy.izabella.propostas.cartao.CartaoFeingClient;
 import com.zupacademy.izabella.propostas.cartao.CartaoRepository;
 import com.zupacademy.izabella.propostas.compartilhado.erros.Erros;
+import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +24,10 @@ public class NovoAvisoViagemController {
     @Autowired
     private AvisoViagemRepository avisoViagemRepository;
 
-    @PostMapping(value = "/aviso-viagem")
+    @Autowired
+    private CartaoFeingClient client;
+
+    @PostMapping(value = "/viagens")
     public ResponseEntity<?> criaAviso(@PathVariable Long id, @RequestBody @Valid AvisoViagemRequest request,
                                        HttpServletRequest servletRequest) {
 
@@ -34,9 +39,18 @@ public class NovoAvisoViagemController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new Erros("cartão", "cartão informado não existe."));
         }
-        AvisoViagem avisoViagem = request.toModel(cartao.get(), ipClient, userAgent);
-        avisoViagemRepository.save(avisoViagem);
-        return ResponseEntity.ok().build();
+
+        try {
+            client.avisaViagem(cartao.get().getNumero(), request);
+            AvisoViagem avisoViagem = request.toModel(cartao.get(), ipClient, userAgent);
+            avisoViagemRepository.save(avisoViagem);
+            return ResponseEntity.ok().build();
+        } catch (FeignException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new Erros("aviso de viagem", "Já existe um aviso de viagem para o lugar informado."));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
+        }
 
     }
 }

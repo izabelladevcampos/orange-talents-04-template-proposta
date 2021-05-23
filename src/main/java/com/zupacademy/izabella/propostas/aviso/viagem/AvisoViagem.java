@@ -24,7 +24,6 @@ public class AvisoViagem {
 
     @NotNull
     @Future
-    @JsonFormat(pattern = "dd/MM/yyyy", shape = JsonFormat.Shape.STRING)
     private LocalDate dataTerminoViagem;
 
     private String ipClient;
