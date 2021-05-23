@@ -4,17 +4,17 @@ import com.zupacademy.izabella.propostas.cartao.Cartao;
 
 import javax.validation.constraints.NotNull;
 
-public class BloqueioRequest {
+public class NovoBloqueioRequest {
 
     @NotNull
     private String sistemaResponsavel;
 
     @Deprecated
-    public BloqueioRequest() {
+    public NovoBloqueioRequest() {
 
     }
 
-    public BloqueioRequest(String sistemaResponsavel) {
+    public NovoBloqueioRequest(String sistemaResponsavel) {
         this.sistemaResponsavel = sistemaResponsavel;
     }
 

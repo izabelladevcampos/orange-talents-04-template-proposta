@@ -1,6 +1,6 @@
 package com.zupacademy.izabella.propostas.cartao;
 
-import com.zupacademy.izabella.propostas.cartao.bloqueio.BloqueioRequest;
+import com.zupacademy.izabella.propostas.cartao.bloqueio.NovoBloqueioRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +11,6 @@ public interface CartaoFeingClient {
 	public CartaoResponse emiteCartao(@RequestParam("idProposta") Long idProposta);
 
 	@PostMapping(value = "/api/cartoes/{id}/bloqueios", consumes = "application/json")
-	void bloqueia(@PathVariable("id") String id, @RequestBody BloqueioRequest request);
+	void bloqueia(@PathVariable("id") String id, @RequestBody NovoBloqueioRequest request);
 
 }

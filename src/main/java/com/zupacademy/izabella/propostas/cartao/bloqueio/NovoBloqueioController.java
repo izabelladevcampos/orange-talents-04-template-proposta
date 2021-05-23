@@ -19,8 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/cartao/{id}")
-public class BloqueioController {
+@RequestMapping("api/cartoes/{id}")
+public class NovoBloqueioController {
 
     @Autowired
     private CartaoRepository cartaorepository;
@@ -51,7 +51,7 @@ public class BloqueioController {
 
         try {
             Cartao cartaoParaBloqueio = cartao.get();
-            client.bloqueia(cartao.get().getNumero(), new BloqueioRequest("proposta"));
+            client.bloqueia(cartao.get().getNumero(), new NovoBloqueioRequest("proposta"));
             Bloqueio bloqueio = new Bloqueio(ip, userAgent, cartao.get());
             cartaoParaBloqueio.adicionaBloqueio(bloqueio);
             cartaorepository.save(cartaoParaBloqueio);
