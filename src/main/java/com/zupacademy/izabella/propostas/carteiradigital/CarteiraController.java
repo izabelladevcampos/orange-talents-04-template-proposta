@@ -5,14 +5,12 @@ import com.zupacademy.izabella.propostas.cartao.CartaoFeingClient;
 import com.zupacademy.izabella.propostas.cartao.CartaoRepository;
 import com.zupacademy.izabella.propostas.compartilhado.erros.Erros;
 import feign.FeignException;
-import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Optional;
