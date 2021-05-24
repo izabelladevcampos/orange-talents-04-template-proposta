@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import javax.persistence.*;
 
 import com.zupacademy.izabella.propostas.cartao.bloqueio.Bloqueio;
+import com.zupacademy.izabella.propostas.compartilhado.config.criptografia.DadosConverter;
 import com.zupacademy.izabella.propostas.proposta.Proposta;
 
 @Entity
@@ -13,6 +14,7 @@ public class Cartao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Convert(converter = DadosConverter.class)
     private String numero;
     private String titular;
     private LocalDateTime dataEmissao;

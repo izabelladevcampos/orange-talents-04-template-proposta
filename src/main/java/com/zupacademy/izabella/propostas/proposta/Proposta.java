@@ -2,15 +2,7 @@ package com.zupacademy.izabella.propostas.proposta;
 
 import java.math.BigDecimal;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -18,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 import com.zupacademy.izabella.propostas.cartao.Cartao;
+import com.zupacademy.izabella.propostas.compartilhado.config.criptografia.DadosConverter;
 
 @Entity
 public class Proposta {
@@ -27,6 +20,7 @@ public class Proposta {
 	private Long id;
 
 	@NotBlank
+	@Convert(converter = DadosConverter.class)
 	private String documento;
 
 	@NotBlank
