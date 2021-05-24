@@ -141,10 +141,10 @@ services:
  #       API_CARTAO_URL: http://contas:8888
 
   prometheus:
-    image: prom/prometheus
+    image: prom/prometheus:v2.22.0
     volumes:
-     - prometheus-volume:/etc/prometheus/
-    network_mode: bridge
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-volume:/etc/prometheus/
     ports:
       - "9090:9090"
                  
